@@ -15,7 +15,8 @@ import com.example.fitnesskit.di.AppComponent
 import com.example.fitnesskit.presentation.adapter.TrainListAdapter
 import javax.inject.Inject
 
-class TrainingScheduleFragment : Fragment(R.layout.fragment_training_schedule) {
+class TrainingScheduleFragment : Fragment(R.layout.fragment_training_schedule),
+    BroadcastReceiverObserver {
     private var _binding: FragmentTrainingScheduleBinding? = null
     private val binding get() = _binding!!
 
@@ -50,6 +51,23 @@ class TrainingScheduleFragment : Fragment(R.layout.fragment_training_schedule) {
         observeLaveData()
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as? MainActivity)?.registerObserver(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        (activity as? MainActivity)?.unregisterObserver(this)
+    }
+
+
+    override fun onBroadcastReceived() {
+        if (vm.trainingList.value.isNullOrEmpty()) {
+            vm.getTrainingList()
+        }
+    }
+
     private fun observeLaveData() {
         vm.trainingList.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
@@ -69,6 +87,10 @@ class TrainingScheduleFragment : Fragment(R.layout.fragment_training_schedule) {
                 DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
             addItemDecoration(dividerItemDecoration)
             setHasFixedSize(true)
+        }
+        binding.swipeRefresh.setOnRefreshListener {
+            vm.getTrainingList()
+            binding.swipeRefresh.isRefreshing = false
         }
     }
 }

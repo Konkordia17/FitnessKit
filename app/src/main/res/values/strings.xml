@@ -7,4 +7,9 @@
     <string name="add">Добавить</string>
     <string name="chat">Чат</string>
     <string name="more">Еще</string>
+    <string name="register_error">Ошибка регистрации broadcastReceiver = %s</string>
+    <string name="no_internet_connection">Отсутствует интернет соединение</string>
+    <string name="go_to_settings_title">Для проверки подключения к сети перейдите в настройки своего смартфона</string>
+    <string name="go_to_settings">Перейти в настройки</string>
+    <string name="cancel">Отмена</string>
 </resources>
